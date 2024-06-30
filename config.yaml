@@ -36,6 +36,11 @@ kubectl:
       sudo wget -q -P /usr/local/bin "https://dl.k8s.io/release/$version/bin/linux/amd64/kubectl"
       sudo chmod +x /usr/local/bin/kubectl
 
+nmap:
+  install:
+    if_fail: sudo dnf list --installed nmap
+    install_from_repo: nmap
+
 slack:
   install:
     if_fail: sudo dnf list --installed slack
