@@ -7,10 +7,14 @@ aws-cli:
   install:
     if_fail: sudo dnf list --installed awscli2
     install_from_repo: awscli2
+  files:
+    ./data-secret/aws/config: ${HOME}/.aws/config
 
 bash:
   files:
-    ./data/bash_profile: ${HOME}/.bash_profile
+    ./data-secret/bash/default_environment_variables: ${HOME}/.default_environment_variables
+    ./data/bash/bash_profile: ${HOME}/.bash_profile
+    ./data/bash/custom_bash_prompt.sh: /etc/profile.d/custom_bash_prompt.sh
 
 cloudflare-warp:
   install:
@@ -43,7 +47,6 @@ terminator:
     install_from_repo: terminator
   files:
     ./data/terminator/config: ${HOME}/.config/terminator/config
-    ./data/terminator/terminator-bash-prompt.sh: /etc/profile.d/terminator-bash-prompt.sh
 
 tfenv:
   install:

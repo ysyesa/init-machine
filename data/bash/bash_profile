@@ -5,6 +5,11 @@ if [ -f ~/.bashrc ]; then
     . ~/.bashrc
 fi
 
-# User specific environment and startup programs
+# Get the default environment variables
+if [ -f ~/.default_environment_variables ]; then
+    . ~/.default_environment_variables
+fi
+
+# Arbitrary environment variables
 export PATH="$PATH:$HOME/.tfenv/bin"
 export PATH="$PATH:$HOME/.tgenv/bin"
