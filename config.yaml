@@ -3,6 +3,11 @@
     if_fail: sudo dnf list --installed 1password
     install_from_remote_file: https://downloads.1password.com/linux/rpm/stable/x86_64/1password-latest.rpm
 
+aws-cli:
+  install:
+    if_fail: sudo dnf list --installed awscli2
+    install_from_repo: awscli2
+
 cloudflare-warp:
   install:
     if_fail: sudo dnf list --installed cloudflare-warp
@@ -13,6 +18,15 @@ google-chrome:
   install:
     if_fail: sudo dnf list --installed google-chrome-stable
     install_from_remote_file: https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+
+kubectl:
+  install:
+    if_fail: which kubectl
+    install_script: |
+      #!/bin/bash
+      version=$(curl -L -s https://dl.k8s.io/release/stable.txt)
+      sudo wget -q -P /usr/local/bin "https://dl.k8s.io/release/$version/bin/linux/amd64/kubectl"
+      sudo chmod +x /usr/local/bin/kubectl
 
 slack:
   install:

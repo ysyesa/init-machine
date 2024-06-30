@@ -53,14 +53,17 @@ class InstallConfig:
         self.repo: str                      = data.get("repo")
         self.install_from_repo: str         = data.get("install_from_repo")
         self.install_from_remote_file: str  = data.get("install_from_remote_file")
+        self.install_script: str            = data.get("install_script")
 
         # Verification
         # Currently "if" does not support multiline command
         if "\n" in self.if_fail:
             print_message("'if_fail' does not support multiline command.", error=True)
-        # Either 'install_from_repo' OR 'install_from_remote_file' must be defined
-        if (not self.install_from_repo) == (not self.install_from_remote_file):
-            print_message("Either 'install_from_repo' or 'install_from_remote_file' must be defined.", error=True)
+        # Among all the installation attributes, only allow one definition
+        install_attrs = [self.install_from_repo, self.install_from_remote_file, self.install_script]
+        nonnull_install_attrs = [each for each in install_attrs if each is not None]
+        if len(nonnull_install_attrs) != 1:
+            print_message("Multiple definition of installation attributes.", error=True)
         # If it installs from remote file, make the sure the URL is a download URL for an RPM file
         if self.install_from_remote_file and not self.install_from_remote_file.endswith(".rpm"):
             print_message("Remote file must be an RPM file.", error=True)
@@ -81,12 +84,14 @@ class InstallConfig:
         """
         if self.should_be_installed():
             if self.install_from_repo:
-                self.__install_from_repo()
-            elif self.__install_from_remote_file:
-                self.__install_from_remote_file()
+                self.__run_install_from_repo()
+            elif self.install_from_remote_file:
+                self.__run_install_from_remote_file()
+            elif self.install_script:
+                self.__run_install_script()
 
 
-    def __install_from_repo(self):
+    def __run_install_from_repo(self):
         """Install the package from repository. If 'repo' is defined, then add the repo first, before installing it.
         """
         if self.repo:
@@ -103,7 +108,7 @@ class InstallConfig:
             print_message(f"Failed to install package: {output}", error=True)
 
 
-    def __install_from_remote_file(self):
+    def __run_install_from_remote_file(self):
         """Install the package from RPM remote file. The file will be downloaded first and stored temporarily in `/tmp`.
         """
         print_message(f"Downloading remote file {self.install_from_remote_file}")
@@ -118,6 +123,21 @@ class InstallConfig:
         print_message(f"Installing package from file {filename}")
         command = f"sudo dnf install -y {filename}"
         status, output = run_command(command)
+        if not status:
+            print_message(f"Failed to install package: {output}", error=True)
+
+
+    def __run_install_script(self):
+        """Install the package by running an arbitrary command. The command can be in multiple line, hence it will be stored
+        in a temporary file first, before being executed.
+        """
+        print_message("Running installation script")
+        filename = "/tmp/temp-installation-script"
+        with open(filename, "w") as file:
+            file.write(self.install_script)
+        os.chmod(filename, 0o700)
+        
+        status, output = run_command(filename)
         if not status:
             print_message(f"Failed to install package: {output}", error=True)
 
@@ -185,13 +205,17 @@ class Entry:
         self.name: str                      = name
         self.install_config: InstallConfig  = InstallConfig(install_config) if install_config else None
         self.files_config: FilesConfig      = FilesConfig(files_config) if files_config else None
+        self.actions: list                  = self.__get_actions()
 
 
-    def get_actions(self):
+    def __get_actions(self):
         actions = []
         if self.install_config and self.install_config.should_be_installed():
             package = self.install_config.install_from_repo if self.install_config.install_from_repo else self.install_config.install_from_remote_file
-            actions.append(f"Package will be installed: {package}")
+            if package:
+                actions.append(f"Package will be installed: {package}")
+            else:
+                actions.append("Package will be installed")
         if self.files_config:
             for each in self.files_config.files:
                 action = each["action"]
@@ -200,14 +224,14 @@ class Entry:
                     actions.append(f"File will be created: {target_file}")
                 elif action == FilesConfig.ACTION_UPDATED:
                     actions.append(f"File will be updated: {target_file}")
+        return actions
 
-        print(f"Name: {self.name}")
         if actions:
+            print(self.name)
             for each in actions:
-                print(each)
+                print(f"- {each}")
         else:
-            print("OK")
-        print()
+            print(f"{self.name}: OK")
         return actions != []
 
 
@@ -216,11 +240,20 @@ if __name__ == "__main__":
     entries = []
     for name, data in yaml.load(open("config.yaml", "r").read(), Loader=yaml.FullLoader).items():
         entries.append(Entry(name, data))
-
-    any_actions = False
+    
+    entries = sorted(entries, key=lambda x:len(x.actions))
+    any_action = False
     for each in entries:
-        any_actions = each.get_actions() or any_actions
-    if any_actions and input("Are you sure to continue? Type 'Y' to continue: ") == "Y":
+        if not each.actions:
+            print(f"{each.name}: OK")
+            continue
+        any_action = True
+        for action in each.actions:
+            print()
+            print(f"{each.name}: WILL BE MODIFIED")
+            print(f"- {action}")
+        print()
+    if any_action and input("Are you sure to continue? Type 'Y' to continue: ") == "Y":
         for each in entries:
             if each.install_config:
                 each.install_config.install()
