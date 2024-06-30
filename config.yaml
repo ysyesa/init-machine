@@ -22,6 +22,10 @@ cloudflare-warp:
     repo: https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
     install_from_repo: cloudflare-warp
 
+crypto-policies:
+  files:
+    ./data/crypto-policies/legacy-openssl.txt: /usr/share/crypto-policies/LEGACY/openssl.txt
+
 google-chrome:
   install:
     if_fail: sudo dnf list --installed google-chrome-stable
