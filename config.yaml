@@ -24,7 +24,8 @@ terminator:
     if_fail: sudo dnf list --installed terminator
     install_from_repo: terminator
   files:
-    ./data/config_terminator: ${HOME}/.config/terminator/config
+    ./data/terminator/config: ${HOME}/.config/terminator/config
+    ./data/terminator/terminator-bash-prompt.sh: /etc/profile.d/terminator-bash-prompt.sh
 
 vscode:
   install:
