@@ -1,0 +1,32 @@
+1password:
+  install:
+    if_fail: sudo dnf list --installed 1password
+    install_from_remote_file: https://downloads.1password.com/linux/rpm/stable/x86_64/1password-latest.rpm
+
+cloudflare-warp:
+  install:
+    if_fail: sudo dnf list --installed cloudflare-warp
+    repo: https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
+    install_from_repo: cloudflare-warp
+
+google-chrome:
+  install:
+    if_fail: sudo dnf list --installed google-chrome-stable
+    install_from_remote_file: https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+
+slack:
+  install:
+    if_fail: sudo dnf list --installed slack
+    install_from_remote_file: https://downloads.slack-edge.com/desktop-releases/linux/x64/4.39.88/slack-4.39.88-0.1.el8.x86_64.rpm
+
+terminator:
+  install:
+    if_fail: sudo dnf list --installed terminator
+    install_from_repo: terminator
+  files:
+    ./data/config_terminator: ${HOME}/.config/terminator/config
+
+vscode:
+  install:
+    if_fail: sudo dnf list --installed code
+    install_from_remote_file: https://vscode.download.prss.microsoft.com/dbazure/download/stable/5437499feb04f7a586f677b155b039bc2b3669eb/code-1.90.2-1718751675.el8.x86_64.rpm

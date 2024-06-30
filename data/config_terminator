@@ -1,0 +1,65 @@
+[global_config]
+  window_state = maximise
+  case_sensitive = False
+[keybindings]
+  zoom_in = <Primary>plus
+  zoom_out = <Primary>underscore
+  zoom_normal = <Primary>equal
+  cycle_next = ""
+  cycle_prev = ""
+  go_next = ""
+  go_prev = ""
+  go_up = <Primary><Shift>Up
+  go_down = <Primary><Shift>Down
+  go_left = <Primary><Shift>Left
+  go_right = <Primary><Shift>Right
+  rotate_cw = ""
+  rotate_ccw = ""
+  split_auto = ""
+  split_horiz = <Primary><Shift>h
+  split_vert = <Primary><Shift>j
+  close_term = ""
+  toggle_scrollbar = ""
+  close_window = ""
+  resize_up = <Primary>Up
+  resize_down = <Primary>Down
+  resize_left = <Primary>Left
+  resize_right = <Primary>Right
+  move_tab_right = <Primary><Shift>Page_Down
+  move_tab_left = <Primary><Shift>Page_Up
+  toggle_zoom = ""
+  scaled_zoom = ""
+  next_tab = <Primary>greater
+  prev_tab = <Primary>less
+  reset = ""
+  reset_clear = <Primary><Shift>l
+  hide_window = ""
+  group_all = ""
+  ungroup_all = ""
+  ungroup_win = ""
+  group_tab = ""
+  ungroup_tab = ""
+  new_terminator = ""
+  insert_number = ""
+  insert_padded = ""
+  edit_window_title = <Primary><Shift>w
+  edit_tab_title = <Primary><Shift>q
+  edit_terminal_title = <Primary><Shift>e
+  layout_launcher = ""
+  preferences_keybindings = ""
+[profiles]
+  [[default]]
+    font = Liberation Mono 14
+    scrollback_lines = 10000
+    use_system_font = False
+    title_transmit_fg_color = "#000000"
+    title_transmit_bg_color = "#1a5fb4"
+[layouts]
+  [[default]]
+    [[[window0]]]
+      type = Window
+      parent = ""
+    [[[child1]]]
+      type = Terminal
+      parent = window0
+[plugins]
