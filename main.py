@@ -68,6 +68,9 @@ class InstallConfig:
         if self.install_from_remote_file and not self.install_from_remote_file.endswith(".rpm"):
             print_message("Remote file must be an RPM file.", error=True)
 
+        # Substitute the environment variables value if necessary
+        self.if_fail = substitute_environment_variable(self.if_fail)
+
 
     def should_be_installed(self) -> bool:
         """Check whether the package should be installed or not

@@ -8,6 +8,10 @@ aws-cli:
     if_fail: sudo dnf list --installed awscli2
     install_from_repo: awscli2
 
+bash:
+  files:
+    ./data/bash_profile: ${HOME}/.bash_profile
+
 cloudflare-warp:
   install:
     if_fail: sudo dnf list --installed cloudflare-warp
@@ -40,6 +44,20 @@ terminator:
   files:
     ./data/terminator/config: ${HOME}/.config/terminator/config
     ./data/terminator/terminator-bash-prompt.sh: /etc/profile.d/terminator-bash-prompt.sh
+
+tfenv:
+  install:
+    if_fail: ls ${HOME}/.tfenv
+    install_script: |
+      #!/bin/bash
+      git clone --depth=1 https://github.com/tfutils/tfenv.git ${HOME}/.tfenv
+
+tgenv:
+  install:
+    if_fail: ls ${HOME}/.tgenv
+    install_script: |
+      #!/bin/bash
+      git clone --depth=1 https://github.com/cunymatthieu/tgenv.git ${HOME}/.tgenv
 
 vscode:
   install:
