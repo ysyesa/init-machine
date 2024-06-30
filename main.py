@@ -155,12 +155,24 @@ class FilesConfig:
         for each in self.files:
             action = each["action"]
             if action == FilesConfig.ACTION_CREATED:
-                os.makedirs(os.path.dirname(each["target_file"]), exist_ok=True)
-                with open(each["target_file"], "w") as file:
-                    file.write(each["origin_file_content"])
+                print_message(f"Creating file {each['target_file']}")
+                try:
+                    os.makedirs(os.path.dirname(each["target_file"]), exist_ok=True)
+                    with open(each["target_file"], "w") as file:
+                        file.write(each["origin_file_content"])
+                except PermissionError:
+                    command = f"sudo mkdir -p {os.path.dirname(each['target_file'])}"
+                    _, _ = run_command(command)
+                    command = f"sudo cp {each['origin_file']} {each['target_file']}"
+                    _, _ = run_command(command)
             elif action == FilesConfig.ACTION_UPDATED:
-                with open(each["target_file"], "w") as file:
-                    file.write(each["origin_file_content"])
+                print_message(f"Updating file {each['target_file']}")
+                try:
+                    with open(each["target_file"], "w") as file:
+                        file.write(each["origin_file_content"])
+                except PermissionError:
+                    command = f"sudo cp {each['origin_file']} {each['target_file']}"
+                    _, _ = run_command(command)
 
 
 class Entry:
