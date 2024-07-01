@@ -45,6 +45,13 @@ nmap:
     if_fail: sudo dnf list --installed nmap
     install_from_repo: nmap
 
+openssh-server:
+  install:
+    if_fail: sudo dnf list --installed openssh-server
+    install_from_repo: openssh-server
+  files:
+    ./data/openssh-server/sshd_config: /etc/ssh/sshd_config.d/sshd_config.conf
+
 slack:
   install:
     if_fail: sudo dnf list --installed slack
