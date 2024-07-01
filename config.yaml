@@ -50,6 +50,11 @@ slack:
     if_fail: sudo dnf list --installed slack
     install_from_remote_file: https://downloads.slack-edge.com/desktop-releases/linux/x64/4.39.88/slack-4.39.88-0.1.el8.x86_64.rpm
 
+solaar:
+  install:
+    if_fail: sudo dnf list --installed solaar
+    install_from_repo: solaar
+
 terminator:
   install:
     if_fail: sudo dnf list --installed terminator
