@@ -1,7 +1,7 @@
-1password:
-  install:
-    if_fail: sudo dnf list --installed 1password
-    install_from_remote_file: https://downloads.1password.com/linux/rpm/stable/x86_64/1password-latest.rpm
+##########################
+# Installation from Repo #
+##########################
+# The softwares below are installed from repositories 
 
 aws-cli:
   install:
@@ -10,35 +10,41 @@ aws-cli:
   files:
     ./data-secret/aws/config: ${HOME}/.aws/config
 
-bash:
-  files:
-    ./data-secret/bash/default_environment_variables: ${HOME}/.default_environment_variables
-    ./data/bash/bash_profile: ${HOME}/.bash_profile
-    ./data/bash/custom_bash_prompt.sh: /etc/profile.d/custom_bash_prompt.sh
-
 cloudflare-warp:
   install:
     if_fail: sudo dnf list --installed cloudflare-warp
     repo: https://pkg.cloudflareclient.com/cloudflare-warp-ascii.repo
     install_from_repo: cloudflare-warp
 
-crypto-policies:
-  files:
-    ./data/crypto-policies/legacy-openssl.txt: /usr/share/crypto-policies/LEGACY/openssl.txt
-
-google-chrome:
+containerd.io:
   install:
-    if_fail: sudo dnf list --installed google-chrome-stable
-    install_from_remote_file: https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+    if_fail: sudo dnf list --installed containerd.io
+    repo: https://download.docker.com/linux/fedora/docker-ce.repo
+    install_from_repo: containerd.io
 
-kubectl:
+docker-buildx-plugin:
   install:
-    if_fail: which kubectl
-    install_script: |
-      #!/bin/bash
-      version=$(curl -L -s https://dl.k8s.io/release/stable.txt)
-      sudo wget -q -P /usr/local/bin "https://dl.k8s.io/release/$version/bin/linux/amd64/kubectl"
-      sudo chmod +x /usr/local/bin/kubectl
+    if_fail: sudo dnf list --installed docker-buildx-plugin
+    repo: https://download.docker.com/linux/fedora/docker-ce.repo
+    install_from_repo: docker-buildx-plugin
+
+docker-ce:
+  install:
+    if_fail: sudo dnf list --installed docker-ce
+    repo: https://download.docker.com/linux/fedora/docker-ce.repo
+    install_from_repo: docker-ce
+
+docker-ce-cli:
+  install:
+    if_fail: sudo dnf list --installed docker-ce-cli
+    repo: https://download.docker.com/linux/fedora/docker-ce.repo
+    install_from_repo: docker-ce-cli
+
+docker-compose-plugin:
+  install:
+    if_fail: sudo dnf list --installed docker-compose-plugin
+    repo: https://download.docker.com/linux/fedora/docker-ce.repo
+    install_from_repo: docker-compose-plugin
 
 nmap:
   install:
@@ -52,11 +58,6 @@ openssh-server:
   files:
     ./data/openssh-server/sshd_config: /etc/ssh/sshd_config.d/sshd_config.conf
 
-slack:
-  install:
-    if_fail: sudo dnf list --installed slack
-    install_from_remote_file: https://downloads.slack-edge.com/desktop-releases/linux/x64/4.39.88/slack-4.39.88-0.1.el8.x86_64.rpm
-
 solaar:
   install:
     if_fail: sudo dnf list --installed solaar
@@ -68,6 +69,52 @@ terminator:
     install_from_repo: terminator
   files:
     ./data/terminator/config: ${HOME}/.config/terminator/config
+
+yq:
+  install:
+    if_fail: sudo dnf list --installed yq
+    install_from_repo: yq
+
+
+#################################
+# Installation from Remote File #
+#################################
+# The softwares below are installed from downloaded remote RPM files
+
+1password:
+  install:
+    if_fail: sudo dnf list --installed 1password
+    install_from_remote_file: https://downloads.1password.com/linux/rpm/stable/x86_64/1password-latest.rpm
+
+google-chrome:
+  install:
+    if_fail: sudo dnf list --installed google-chrome-stable
+    install_from_remote_file: https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
+
+slack:
+  install:
+    if_fail: sudo dnf list --installed slack
+    install_from_remote_file: https://downloads.slack-edge.com/desktop-releases/linux/x64/4.39.88/slack-4.39.88-0.1.el8.x86_64.rpm
+
+vscode:
+  install:
+    if_fail: sudo dnf list --installed code
+    install_from_remote_file: https://vscode.download.prss.microsoft.com/dbazure/download/stable/5437499feb04f7a586f677b155b039bc2b3669eb/code-1.90.2-1718751675.el8.x86_64.rpm
+
+
+#################################
+# Installation by Custom Script #
+#################################
+# The softwares below are installed using custom script
+
+kubectl:
+  install:
+    if_fail: which kubectl
+    install_script: |
+      #!/bin/bash
+      version=$(curl -L -s https://dl.k8s.io/release/stable.txt)
+      sudo wget -q -P /usr/local/bin "https://dl.k8s.io/release/$version/bin/linux/amd64/kubectl"
+      sudo chmod +x /usr/local/bin/kubectl
 
 tfenv:
   install:
@@ -83,12 +130,17 @@ tgenv:
       #!/bin/bash
       git clone --depth=1 https://github.com/cunymatthieu/tgenv.git ${HOME}/.tgenv
 
-vscode:
-  install:
-    if_fail: sudo dnf list --installed code
-    install_from_remote_file: https://vscode.download.prss.microsoft.com/dbazure/download/stable/5437499feb04f7a586f677b155b039bc2b3669eb/code-1.90.2-1718751675.el8.x86_64.rpm
 
-yq:
-  install:
-    if_fail: sudo dnf list --installed yq
-    install_from_repo: yq
+##########
+# Others #
+##########
+
+bash:
+  files:
+    ./data-secret/bash/default_environment_variables: ${HOME}/.default_environment_variables
+    ./data/bash/bash_profile: ${HOME}/.bash_profile
+    ./data/bash/custom_bash_prompt.sh: /etc/profile.d/custom_bash_prompt.sh
+
+crypto-policies:
+  files:
+    ./data/crypto-policies/legacy-openssl.txt: /usr/share/crypto-policies/LEGACY/openssl.txt
