@@ -137,6 +137,7 @@ tgenv:
 
 bash:
   files:
+    ./data-secret/bash/default_aliases: ${HOME}/.default_aliases
     ./data-secret/bash/default_environment_variables: ${HOME}/.default_environment_variables
     ./data/bash/bash_profile: ${HOME}/.bash_profile
     ./data/bash/custom_bash_prompt.sh: /etc/profile.d/custom_bash_prompt.sh

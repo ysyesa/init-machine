@@ -5,6 +5,11 @@ if [ -f ~/.bashrc ]; then
     . ~/.bashrc
 fi
 
+# Get the default aliases
+if [ -f ~/.default_aliases ]; then
+    . ~/.default_aliases
+fi
+
 # Get the default environment variables
 if [ -f ~/.default_environment_variables ]; then
     . ~/.default_environment_variables
