@@ -91,6 +91,16 @@ google-chrome:
     if_fail: sudo dnf list --installed google-chrome-stable
     install_from_remote_file: https://dl.google.com/linux/direct/google-chrome-stable_current_x86_64.rpm
 
+mongodb-mongosh:
+  install:
+    if_fail: sudo dnf list --installed mongodb-mongosh
+    install_from_remote_file: https://downloads.mongodb.com/compass/mongodb-mongosh-2.2.12.x86_64.rpm
+
+mysql-shell:
+  install:
+    if_fail: sudo dnf list --installed mysql-shell
+    install_from_remote_file: https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell-9.0.0-1.fc40.x86_64.rpm
+
 slack:
   install:
     if_fail: sudo dnf list --installed slack
