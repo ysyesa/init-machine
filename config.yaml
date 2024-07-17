@@ -46,6 +46,11 @@ docker-compose-plugin:
     repo: https://download.docker.com/linux/fedora/docker-ce.repo
     install_from_repo: docker-compose-plugin
 
+mysql:
+  install:
+    if_fail: sudo dnf list --installed mysql
+    install_from_repo: mysql
+
 nmap:
   install:
     if_fail: sudo dnf list --installed nmap
@@ -95,11 +100,6 @@ mongodb-mongosh:
   install:
     if_fail: sudo dnf list --installed mongodb-mongosh
     install_from_remote_file: https://downloads.mongodb.com/compass/mongodb-mongosh-2.2.12.x86_64.rpm
-
-mysql-shell:
-  install:
-    if_fail: sudo dnf list --installed mysql-shell
-    install_from_remote_file: https://cdn.mysql.com//Downloads/MySQL-Shell/mysql-shell-9.0.0-1.fc40.x86_64.rpm
 
 slack:
   install:
