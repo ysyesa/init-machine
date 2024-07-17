@@ -46,6 +46,11 @@ docker-compose-plugin:
     repo: https://download.docker.com/linux/fedora/docker-ce.repo
     install_from_repo: docker-compose-plugin
 
+golang:
+  install:
+    if_fail: sudo dnf list --installed golang
+    install_from_repo: golang
+
 mysql:
   install:
     if_fail: sudo dnf list --installed mysql
