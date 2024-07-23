@@ -103,7 +103,7 @@ google-chrome:
 
 mongodb-mongosh:
   install:
-    if_fail: sudo dnf list --installed mongodb-mongosh
+    if_fail: sudo dnf list --installed mongodb-mongosh-shared-openssl3
     install_from_remote_file: https://downloads.mongodb.com/compass/mongodb-mongosh-shared-openssl3-2.2.12.x86_64.rpm
 
 slack:
